@@ -19,11 +19,6 @@ const store = {
     books: [],
 }
 
-// [1, 2, 3].map(el => {
-//     const newBook = new Book(`books ${el}`, `desc books ${el}`);
-//     store.books.push(newBook);
-// });
-
 router.get('/api/books', (req, res) => {
     const {books} = store;
     res.json(books);
@@ -103,13 +98,12 @@ router.get('/:id', (req, res) => {
 
     if (idx === -1) {
         res.redirect('/404');
+    }else{
+        res.render("books/view", {
+            title: "Books | view",
+            books: books[idx],
+        });
     }
-
-    res.render("books/view", {
-        title: "Books | view",
-        books: books[idx],
-    });
-
 });
 
 router.get('/update/:id', (req, res) => {
@@ -119,12 +113,12 @@ router.get('/update/:id', (req, res) => {
 
     if (idx === -1) {
         res.redirect('/404');
+    }else {
+        res.render("books/update", {
+            title: "Books | view",
+            books: books[idx],
+        });
     }
-
-    res.render("books/update", {
-        title: "Books | view",
-        books: books[idx],
-    });
 });
 
 router.post('/update/:id', (req, res) => {
@@ -135,18 +129,18 @@ router.post('/update/:id', (req, res) => {
 
     if (idx === -1) {
         res.redirect('/404');
+    }else{
+        books[idx] = {
+            ...books[idx],
+            title,
+            desc,
+            authors,
+            favorite,
+            fileCover
+
+        };
+        res.redirect(`/books/${id}`);
     }
-
-    books[idx] = {
-        ...books[idx],
-        title,
-        desc,
-        authors,
-        favorite,
-        fileCover
-
-    };
-    res.redirect(`/books/${id}`);
 });
 
 router.post('/delete/:id', (req, res) => {
@@ -156,10 +150,10 @@ router.post('/delete/:id', (req, res) => {
 
     if (idx === -1) {
         res.redirect('/404');
+    }else{
+        books.splice(idx, 1);
+        res.redirect(`/books`);
     }
-
-    books.splice(idx, 1);
-    res.redirect(`/books`);
 });
 
 module.exports = router;
